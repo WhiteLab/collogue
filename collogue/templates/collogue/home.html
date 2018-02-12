@@ -1,0 +1,87 @@
+{% extends 'collogue/base.html' %}
+{% load staticfiles %}
+
+{% block extra_js %}
+<script>
+    var addResUrl = {{ urls.add_reservation }};
+    var getResUrl = {{ urls.get_reservation }};
+    var deleteResUrl = {{ urls.delete_reservation }};
+</script>
+<script src="{% static 'home.js' %}"></script>
+{% endblock extra_js %}
+
+{% block content %}
+<div class="top">
+    <h1 style="margin-bottom:0">{{ app_name }}</h1>
+</div>
+<div class="top">
+    <p>
+        <select id="room-select">
+            {% for room in rooms %}
+            <option value="{{ room.pk }}">{{ room.name }}</option>
+            {% endfor %}
+        </select>
+
+    </p>
+    <p><span id="loading-res">Loading reservations...</span></p>
+    {% if user.is_authenticated %}
+        <p>Welcome {{ user }} | <a href="/logout">Logout&nbsp;<span class="fa fa-sign-out"></span></a></p>
+    {% else %}
+        <p>Welcome anonymous</p>
+    {% endif %}
+</div>
+
+
+<span id="message"></span>
+<div class="cal-wrapper">
+    <div id="cal"></div>
+</div>
+
+
+<div class="bottom">
+    <button type="button" id="add-res"><span class="fa fa-bookmark-o"></span>&nbsp;&nbsp;Add Reservation</button>
+    <div style="float:right">
+        <button type="button" class="date-nav" data-add="-7"><span class="fa fa-caret-left"></span>&nbsp;&nbsp;Previous Week</button>
+        <button type="button" class="date-nav" data-add="7">Next Week&nbsp;&nbsp;<span class="fa fa-caret-right"></span></button>
+    </div>
+
+</div>
+
+
+<div id="hidden-drawer-underlay"></div>
+<div id="create-event-dialogue" class="bottom-dialogue" data-state="closed">
+    <div>
+        <span class="close-dialogue"><span class="fa fa-remove"></span></span>
+        <h1 style="display:inline-block;margin-left:12px">Create a New Reservation</h1>
+        <ul class="form-display">
+            <li>
+                <label for="event-name">Reservation Name:</label>
+                <input id="event-name" class="event-name" name="event-name" />
+            </li>
+            <li>
+                <label for="event-description">Reservation Description:</label>
+                <textarea rows="6" id="event-description" class="event-description" name="event-description"></textarea><br/>
+            </li>
+            <li>
+                <label for="res-start">Start:</label>
+                <input id="res-start" class="event-start" name="event-start" placeholder="[YYYY]-[MM]-[DD]T[HH]:[MM]:[SS]" />
+            </li>
+            <li>
+                <label for="res-end">End:</label>
+                <input id="res-end" class="event-end" name="event-end" placeholder="[YYYY]-[MM]-[DD]T[HH]:[MM]:[SS]" />
+            </li>
+            <li>
+                <button type="button" class="event-create-btn">Create Reservation</button>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<div id="edit-event-dialogue" class="bottom-dialogue" data-state="closed">
+    <div>
+        <span class="close-dialogue"><span class="fa fa-remove"></span></span>
+        <h1 style="display:inline-block;margin-left:12px">Delete Reservation "<span class="title"></span>"?</h1><br/>
+        <button type="button" data-pk="0">Delete</button>
+    </div>
+</div>
+{% endblock content %}

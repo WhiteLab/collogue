@@ -1,0 +1,40 @@
+{% load i18n %}
+<div class="detail">
+<h2 align="center">{{occurrence.title}}</h2>
+<table align="center">
+    <tr>
+        <td class="left">Starts</td>
+        <td>{% blocktrans with occurrence.start|date:_("DATETIME_FORMAT") as start_date %}{{ start_date }}{% endblocktrans %}</td>
+    </tr>
+    <tr>
+        <td class="left">Ends</td>
+        <td>{% blocktrans with occurrence.end|date:_("DATETIME_FORMAT") as end_date %}{{ end_date }}{% endblocktrans %}</td>
+    </tr>
+	<tr>
+        <td class="left">Creator</td>
+        <td>{% blocktrans with occurrence.reservation.creator as creator %}{{ creator }}{% endblocktrans %}</td>
+    </tr>
+	<tr>
+        <td class="left">Created on</td>
+        <td>{% blocktrans with occurrence.reservation.created_on as created_on %}{{ created_on }}{% endblocktrans %}</td>
+    </tr>
+    {% if occurrence.reservation.rule %}
+        {% if not occurrence.id %}
+            <tr>
+                <td class="left">Reoccurs</td><td>{{occurrence.reservation.rule}}</td>
+            </tr>
+            {% if occurrence.reservation.end_recurring_period %}
+                <tr>
+                    <td class="left">Until</td>
+                    <td>{% blocktrans with occurrence.reservation.end_recurring_period|date:_("DATETIME_FORMAT") as end_date %}{{ end_date }}{% endblocktrans %}</td>
+                </tr>
+            {% endif %}
+        {% endif %}
+    {% endif %}
+</table>
+{% if occurrence.description %}
+<h3>Description</h3>
+<p>{{occurrence.description}}</p>
+{% endif %}
+</div>
+

@@ -1,0 +1,18 @@
+{% extends 'collogue/base.html' %}
+{% block content %}
+<div class="top">
+    <h1 style="margin-bottom:0">{{ app_name }}</h1>
+</div>
+<div class="top">
+    <form method="post">
+        <ul class="form-display pop">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <li>
+                <button type="submit">Login</button>
+            </li>
+        </ul>
+    </form>
+</div>
+
+{% endblock content %}

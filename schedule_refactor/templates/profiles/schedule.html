@@ -1,0 +1,51 @@
+{% load i18n %}
+{% load scheduletags %}
+
+<h2>{% trans "Schedule" %}</h2>
+
+{% get_or_create_room other_user other_user.username as room %}
+
+{% if room.reservation_set.count %}
+<table>
+    <thead>
+        <tr>
+            <th>{% trans "Start" %}</th>
+            <th>{% trans "End" %}</th>
+            <th>{% trans "Title" %}</th>
+            <th>&nbsp;</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for reservation in room.reservation_set.all %}
+        <tr>
+            <td>{{ reservation.start }}</td>
+            <td>{{ reservation.end }}</td>
+            <td>{{ reservation.title }}</td>
+            <td>
+                {% block schedule_reservation_controls %}
+                <a href="{% url reservation reservation.pk %}" title="{% trans "Reservation details" %} {{ reservation }}">
+                    <img src="{{ settings.MEDIA_URL }}icons/time_go.png" alt="{% trans "Reservation details" %}" />
+                </a>
+                {% ifequal request.user other_user %}
+                <a href="{% url edit_reservation room.slug reservation.pk %}" title="{% trans "Edit reservation" %} {{ reservation }}">
+                    <img src="{{ settings.MEDIA_URL }}icons/time_edit.png" alt="{% trans "Edit reservation" %}" />
+                </a>
+                <a href="{% url delete_reservation reservation.pk %}" title="{% trans "Delete reservation" %} {{ reservation }}">
+                    <img src="{{ settings.MEDIA_URL }}icons/time_delete.png" alt="{% trans "Delete reservation" %}" />
+                </a>
+                {% endifequal %}
+                {% endblock schedule_reservation_controls %}
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% else %}
+    {% url room_create_reservation as add_reservation_url %}
+    <p>{% blocktrans %}You haven't added any <a href="{{ add_reservation_url }}">reservation</a> yet.{% endblocktrans %}</p>
+{% endif %}
+
+<p>
+    <a href="{% url room_create_reservation room %}">{% block schedule_add_reservation_link_label %}{% trans "Add reservation" %}{% endblock %}</a>
+</p>
+

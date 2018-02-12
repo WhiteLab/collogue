@@ -1,0 +1,19 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Collogue | Conference Room Scheduler</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+    <link href="https://fonts.googleapis.com/css?family=Roboto+Condensed" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/collogue.css' %}" />
+    <script src="{% static 'jquery/dist/jquery.min.js' %}"></script>
+    <script src="{% static 'daypilot-all.min.js' %}"></script>
+    {% block extra_js %}
+    {% endblock extra_js %}
+</head>
+<body>
+    {% block content %}
+    {% endblock content %}
+</body>
+</html>
