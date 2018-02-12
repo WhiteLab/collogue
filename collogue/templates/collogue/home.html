@@ -3,9 +3,9 @@
 
 {% block extra_js %}
 <script>
-    var addResUrl = {{ urls.add_reservation }};
-    var getResUrl = {{ urls.get_reservation }};
-    var deleteResUrl = {{ urls.delete_reservation }};
+    var addResUrl = '{{ urls.add_reservation }}';
+    var getResUrl = '{{ urls.get_reservation }}';
+    var deleteResUrl = '{{ urls.delete_reservation }}';
 </script>
 <script src="{% static 'home.js' %}"></script>
 {% endblock extra_js %}

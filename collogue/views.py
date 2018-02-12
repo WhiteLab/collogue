@@ -50,7 +50,6 @@ class AddReservationView(LoginRequiredMixin, View):
             if settings.SEND_APPROVER_EMAIL:
                 approve_url = urljoin(
                     settings.URL_HOSTNAME,
-                    settings.URL_PREFIX,
                     reverse('approve_reservation', args=(res.pk,))
                 )
                 msg = ('Room: {room}{{nl}}'
@@ -111,5 +110,5 @@ class ApproveReservationView(LoginRequiredMixin, View):
             res = Reservation.objects.get(pk=res_pk)
             res.approved = True
             res.save()
-            return HttpResponse('Success')
+            return HttpResponse('Approved')
         return HttpResponse('You are not authorized to approve reservations')
