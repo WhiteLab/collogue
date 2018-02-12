@@ -19,6 +19,7 @@ class HomeView(LoginRequiredMixin, View):
             'add_reservation': urljoin('/', settings.URL_PREFIX, 'add-reservation'),
             'get_reservation': urljoin('/', settings.URL_PREFIX, 'get-reservation'),
             'delete_reservation': urljoin('/', settings.URL_PREFIX, 'delete-reservation'),
+            'logout': urljoin('/', settings.URL_PREFIX, 'logout?next=', settings.URL_PREFIX)
         }
         context = {
             'rooms': Room.objects.all(),

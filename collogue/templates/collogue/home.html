@@ -25,7 +25,7 @@
     </p>
     <p><span id="loading-res">Loading reservations...</span></p>
     {% if user.is_authenticated %}
-        <p>Welcome {{ user }} | <a href="/logout">Logout&nbsp;<span class="fa fa-sign-out"></span></a></p>
+        <p>Welcome {{ user }} | <a href="{{ urls.logout }}">Logout&nbsp;<span class="fa fa-sign-out"></span></a></p>
     {% else %}
         <p>Welcome anonymous</p>
     {% endif %}
