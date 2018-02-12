@@ -127,6 +127,9 @@ URL_PREFIX = local_settings.URL_PREFIX
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
 STATIC_URL = urljoin('/', URL_PREFIX, 'static')
+STATIC_PATH = os.path.join(BASE_DIR, 'static')
+STATIC_ROOT = STATIC_PATH
+
 LOGIN_URL = urljoin('/', URL_PREFIX, 'login')
 
 # Bower settings
