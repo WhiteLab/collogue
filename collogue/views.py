@@ -79,7 +79,16 @@ class AddReservationView(LoginRequiredMixin, View):
                     recipient_list=settings.APPROVER_EMAILS
                 )
 
-            return HttpResponse(json.dumps({'result': 'success', 'id': res.pk}))
+            return HttpResponse(json.dumps({
+                'result': 'success',
+                'id': res.pk,
+                'text': '<b>{name} (Unapproved)</b><br/>{start} - {end}<br/>{description}'.format(
+                    name=res.name,
+                    start=res.start_time.strftime('%I:%M%p'),
+                    end=res.end_time.strftime('%I:%M%p'),
+                    description=res.description
+                )
+            }))
         except Exception as e:
             return HttpResponse(json.dumps({'result': 'error', 'error': str(e)}))
 
@@ -99,10 +108,12 @@ class GetReservationView(View):
 class DeleteReservationView(LoginRequiredMixin, View):
     def get(self, request, res_pk):
         try:
-            Reservation.objects.get(pk=res_pk).delete()
-            return HttpResponse(json.dumps({'result': 'success'}))
+            res = Reservation.objects.get(pk=res_pk)
+            res_name = res.name
+            res.delete()
+            return HttpResponse(json.dumps({'result': 'success', 'name': res_name}))
         except Exception as e:
-            return HttpResponse(json.dumps({'result': 'error', 'error': str(e)}))
+            return HttpResponse(json.dumps({'result': 'error', 'error': str(e), 'name': res_name}))
 
 
 class ApproveReservationView(LoginRequiredMixin, View):

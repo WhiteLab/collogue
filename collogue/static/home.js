@@ -54,7 +54,14 @@ $(function() {
             });
             $createEventDialogue.find('input.event-name').focus();
         };
+        cal.eventResizeHandling = 'Disabled';
+        cal.eventMoveHandling = 'Disabled';
         cal.init();
+
+        // Set background color of today's date
+        // var today = new Date();
+        // var dateString = (today.getMonth() + 1) + '/' + today.getDate() + '/' + today.getFullYear();
+        // $('div.calendar_default_colheader_inner:contains("' + dateString + '")').attr('id', 'today');
 
         // Clear out the loadedWeeks array
         while(loadedWeeks.length) loadedWeeks.pop();
@@ -93,9 +100,9 @@ $(function() {
      * Display a message in a very simple way for a specified duration.
      */
     function displayMessage(message, duration) {
-        $('#message').text(message);
+        $('#message').text(message).show();
         window.setTimeout(function() {
-            $('#message').empty();
+            $('#message').empty().hide();
         }, duration || 4000);
     }
 
@@ -123,7 +130,7 @@ $(function() {
                     start: start,
                     end: end,
                     id: data.id,
-                    text: '<b>' + name + ' (Unapproved)</b><br/>' + description,
+                    text: data.text,
                     backColor: '#F4DFB7',
                     borderColor: 'transparent'
                 }));
@@ -152,7 +159,7 @@ $(function() {
         $.get(deleteResUrl + pk + '/', function(rawData) {
             var data = JSON.parse(rawData);
             if (data.result === 'success') {
-                displayMessage('Reservation deleted.');
+                displayMessage('Reservation ' + data.name + ' deleted.');
 
                 // Iterate through reservations until we have an ID match
                 $.each(dp.events.list, function(i, event) {
@@ -164,7 +171,7 @@ $(function() {
                     }
                 });
             } else {
-                displayMessage('Error deleting reservation.');
+                displayMessage('Error deleting reservation' + data.name + '.');
                 console.log(data.error);
             }
 
@@ -179,7 +186,7 @@ $(function() {
      */
     $roomSelect.change(function() {
         dp = initCalendar('cal', loadedWeeks);
-        addWeekReservations(dp.startDate, $(this).val(), loadedWeeks, '#loading-res');
+        addWeekReservations(dp.startDate, $(this).val(), loadedWeeks, '#message');
     }).change();
 
     /*
@@ -188,7 +195,7 @@ $(function() {
     $('button.date-nav').click(function() {
         dp.startDate = dp.startDate.addDays(Number($(this).data('add')));
         dp.update();
-        addWeekReservations(dp.startDate, $roomSelect.val(), loadedWeeks, '#loading-res');
+        addWeekReservations(dp.startDate, $roomSelect.val(), loadedWeeks, '#message');
     });
 
     /*

@@ -23,7 +23,7 @@
         </select>
 
     </p>
-    <p><span id="loading-res">Loading reservations...</span></p>
+    <p><span id="message">Loading reservations...</span></p>
     {% if user.is_authenticated %}
         <p>Welcome {{ user }} | <a href="{{ urls.logout }}">Logout&nbsp;<span class="fa fa-sign-out"></span></a></p>
     {% else %}
@@ -32,7 +32,7 @@
 </div>
 
 
-<span id="message"></span>
+{#<span id="message"></span>#}
 <div class="cal-wrapper">
     <div id="cal"></div>
 </div>
