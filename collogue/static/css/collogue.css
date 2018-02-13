@@ -1,42 +1,127 @@
-/*
-Error: Invalid CSS after "#cal": expected "{", was ""
-        on line 170 of collogue.scss
+body {
+  background-color: #fbfdff;
+  border-top: 6px solid #1066a8;
+  font-family: 'Roboto Condensed', sans-serif; }
+  body, body html {
+    margin: 0; }
 
-165: }
-166: //
-167: //#today {
-168: //    background-color: yellow;
-169: //}
-170: #cal
+.bottom-dialogue {
+  position: fixed;
+  left: 0;
+  top: 100%;
+  width: 100%;
+  height: 75%;
+  background-color: #0c4a79;
+  transition: transform 0.4s;
+  z-index: 10;
+  color: white; }
+  .bottom-dialogue > div {
+    padding: 25px; }
+  .bottom-dialogue span.close-dialogue {
+    font-size: 3rem;
+    cursor: pointer; }
 
-Backtrace:
-collogue.scss:170
-/var/lib/gems/2.3.0/gems/sass-3.5.2/lib/sass/scss/parser.rb:1278:in `expected'
-/var/lib/gems/2.3.0/gems/sass-3.5.2/lib/sass/scss/parser.rb:1208:in `expected'
-/var/lib/gems/2.3.0/gems/sass-3.5.2/lib/sass/scss/parser.rb:1203:in `tok!'
-/var/lib/gems/2.3.0/gems/sass-3.5.2/lib/sass/scss/parser.rb:677:in `block'
-/var/lib/gems/2.3.0/gems/sass-3.5.2/lib/sass/scss/parser.rb:670:in `ruleset'
-/var/lib/gems/2.3.0/gems/sass-3.5.2/lib/sass/scss/parser.rb:696:in `block_child'
-/var/lib/gems/2.3.0/gems/sass-3.5.2/lib/sass/scss/parser.rb:689:in `block_contents'
-/var/lib/gems/2.3.0/gems/sass-3.5.2/lib/sass/scss/parser.rb:137:in `stylesheet'
-/var/lib/gems/2.3.0/gems/sass-3.5.2/lib/sass/scss/parser.rb:41:in `parse'
-/var/lib/gems/2.3.0/gems/sass-3.5.2/lib/sass/engine.rb:414:in `_to_tree'
-/var/lib/gems/2.3.0/gems/sass-3.5.2/lib/sass/engine.rb:389:in `_render_with_sourcemap'
-/var/lib/gems/2.3.0/gems/sass-3.5.2/lib/sass/engine.rb:307:in `render_with_sourcemap'
-/var/lib/gems/2.3.0/gems/sass-3.5.2/lib/sass/plugin/compiler.rb:462:in `update_stylesheet'
-/var/lib/gems/2.3.0/gems/sass-3.5.2/lib/sass/plugin/compiler.rb:215:in `block in update_stylesheets'
-/var/lib/gems/2.3.0/gems/sass-3.5.2/lib/sass/plugin/compiler.rb:209:in `each'
-/var/lib/gems/2.3.0/gems/sass-3.5.2/lib/sass/plugin/compiler.rb:209:in `update_stylesheets'
-/var/lib/gems/2.3.0/gems/sass-3.5.2/lib/sass/plugin.rb:82:in `update_stylesheets'
-/var/lib/gems/2.3.0/gems/sass-3.5.2/lib/sass/exec/sass_scss.rb:340:in `watch_or_update'
-/var/lib/gems/2.3.0/gems/sass-3.5.2/lib/sass/exec/sass_scss.rb:51:in `process_result'
-/var/lib/gems/2.3.0/gems/sass-3.5.2/lib/sass/exec/base.rb:52:in `parse'
-/var/lib/gems/2.3.0/gems/sass-3.5.2/lib/sass/exec/base.rb:19:in `parse!'
-/var/lib/gems/2.3.0/gems/sass-3.5.2/bin/scss:13:in `<top (required)>'
-/usr/local/bin/scss:23:in `load'
-/usr/local/bin/scss:23:in `<main>'
-*/
-body:before {
-  white-space: pre;
-  font-family: monospace;
-  content: "Error: Invalid CSS after \"#cal\": expected \"{\", was \"\"\A         on line 170 of collogue.scss\A \A 165: }\A 166: //\A 167: //#today {\A 168: //    background-color: yellow;\A 169: //}\A 170: #cal"; }
+#hidden-drawer-underlay {
+  opacity: 0.5;
+  transition: transform 0.4s;
+  position: fixed;
+  top: -25%;
+  left: 0;
+  width: 100%;
+  height: 25%;
+  background-color: #051f34;
+  z-index: 5; }
+
+.top {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-left: 5%;
+  margin-right: 5%;
+  margin-bottom: 25px; }
+  .top select {
+    font-size: 1.3rem; }
+
+.bottom {
+  margin: 25px 5%; }
+  .bottom button {
+    padding: 8px;
+    font-size: 1.2rem; }
+
+.cal-wrapper {
+  font-family: 'Roboto Condensed', sans-serif;
+  margin-left: 5%;
+  margin-right: 5%; }
+
+button {
+  font-family: 'Roboto Condensed', sans-serif;
+  -webkit-border-radius: 0;
+  -moz-border-radius: 0;
+  border-radius: 0;
+  border: none;
+  color: #ffffff;
+  font-size: 20px;
+  background: #1066a8;
+  padding: 10px 20px 10px 20px;
+  text-decoration: none;
+  outline: none;
+  cursor: pointer;
+  transition: background 0.1s; }
+
+button:hover {
+  background: #1482d7;
+  text-decoration: none; }
+
+select {
+  -webkit-border-radius: 0;
+  -moz-border-radius: 0;
+  border-radius: 0;
+  border: none;
+  color: #ffffff;
+  background: #1066a8;
+  padding: 10px 20px 10px 20px;
+  text-decoration: none;
+  outline: none;
+  cursor: pointer;
+  transition: background 0.1s; }
+  select:hover {
+    background: #1482d7; }
+
+.form-display {
+  width: 50%;
+  font-size: 1.3rem; }
+  .form-display > li {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    padding: 8px 0; }
+    .form-display > li > label {
+      flex: 1 0 120px;
+      max-width: 220px; }
+      .form-display > li > label + * {
+        flex: 1 0 220px; }
+  .form-display input, .form-display textarea {
+    transition: box-shadow 0.4s;
+    border: 1px solid #1066a8;
+    padding: 8px;
+    font-size: 1.3rem;
+    font-family: 'Roboto Condensed', sans-serif; }
+    .form-display input:focus, .form-display textarea:focus {
+      outline: none;
+      box-shadow: 0 0 6px #1482d7 inset; }
+
+.pop input {
+  transition: transform 0.2s, box-shadow 0.4s; }
+  .pop input:focus {
+    transform: scale(1.04); }
+
+a {
+  text-decoration: none;
+  color: #1066a8;
+  display: inline-block;
+  transition: transform 0.8s; }
+
+a:hover {
+  transform: translate(8px, 0); }
+
+/*# sourceMappingURL=collogue.css.map */
