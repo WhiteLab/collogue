@@ -114,6 +114,10 @@ $(function() {
         var end = $createEventDialogue.find('input.event-end').val();
         var name = $createEventDialogue.find('input.event-name').val();
         var description = $createEventDialogue.find('textarea').val();
+        var resRecurrence = $createEventDialogue.find('select.res-recurrence').val();
+        console.log(resRecurrence);
+        var optionsNth = $createEventDialogue.find('input.options-nth').val();
+        console.log(optionsNth);
         var roomPk = $roomSelect.val();
 
         // Register reservation with the server
@@ -122,6 +126,8 @@ $(function() {
             end_time: end,
             name: name,
             description: description,
+            event_recurrence: resRecurrence,
+            options_nth: optionsNth,
             room: roomPk
         }, function(rawData) {
             var data = JSON.parse(rawData);
@@ -220,5 +226,16 @@ $(function() {
     $('span.close-dialogue').click(function() {
         $createEventDialogue.close();
         $editEventDialogue.close();
+    });
+
+    /*
+     * Show or hide options for recurrence options
+     */
+    $('#res-recurrence').change(function() {
+        if($(this).val() === 'every-nth') {
+            $('#res-recurrence-options-nth').show();
+        } else {
+            $('#res-recurrence-options-nth').hide();
+        }
     });
 });

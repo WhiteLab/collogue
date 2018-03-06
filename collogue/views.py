@@ -1,5 +1,6 @@
 import json
 from datetime import datetime
+import pickle
 
 from django.shortcuts import render
 from django.conf import settings
@@ -8,6 +9,9 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http.response import HttpResponse
 from django.core.mail import send_mail
 from django.urls import reverse
+
+from dateutil.rrule import *
+from dateutil.rrule import weekdays
 
 from collogue import urljoin
 from collogue.models import Room, Reservation
@@ -36,6 +40,31 @@ class AddReservationView(LoginRequiredMixin, View):
             res_start = datetime.strptime(request.GET['start_time'], '%Y-%m-%dT%H:%M:%S')
             res_end = datetime.strptime(request.GET['end_time'], '%Y-%m-%dT%H:%M:%S')
 
+            # Extract recurrence rule
+            recurrence = request.GET['event_recurrence']
+            if recurrence == 'every-nth':
+                nth = {int(n) for n in request.GET['options_nth'].replace(' ', '').split(',')}
+                rrule_pkl = pickle.dumps(rrule(
+                    MONTHLY,
+                    byweekday=[weekdays[res_start.weekday()](n) for n in nth],
+                    dtstart=res_start,
+                    count=500
+                ))
+            elif recurrence == 'every-week':
+                rrule_pkl = pickle.dumps(rrule(
+                    WEEKLY,
+                    dtstart=res_start,
+                    count=500
+                ))
+            elif recurrence == 'every-month':
+                rrule_pkl = pickle.dumps(rrule(
+                    MONTHLY,
+                    dtstart=res_start,
+                    count=500
+                ))
+            else:
+                rrule_pkl = None
+
             res = Reservation(
                 room=Room.objects.get(pk=int(request.GET['room'])),
                 name=request.GET['name'],
@@ -43,7 +72,7 @@ class AddReservationView(LoginRequiredMixin, View):
                 reserved_by=request.user,
                 start_time=res_start,
                 end_time=res_end,
-                recurrence_rule_args=None
+                recurrence_rule_args=rrule_pkl
             )
             res.save()
 

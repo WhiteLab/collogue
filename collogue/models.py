@@ -1,4 +1,6 @@
 from datetime import datetime
+import pickle
+import uuid
 
 from django.db import models
 from django.contrib.auth.models import User
@@ -22,9 +24,9 @@ class Reservation(models.Model):
     reserved_by = models.ForeignKey(User)
     start_time = models.DateTimeField('Reservation Start Time')
     end_time = models.DateTimeField('Reservation End Time')
-    recurrence_rule_args = models.CharField('Reservation Recurrence Rule', max_length=2048, blank=True, null=True,
-                                            help_text='JSON representation of the arguments to a dateutile.rrule.rrule '
-                                                      'for this Reservation')
+    recurrence_rule_args = models.BinaryField('Reservation Recurrence Rule', blank=True, null=True,
+                                              help_text='JSON representation of the arguments to a '
+                                                        'dateutil.rrule.rrule for this Reservation')
     approved = models.BooleanField('Approved', default=False)
     equipment_request = None
     participants = None
@@ -45,7 +47,28 @@ class Reservation(models.Model):
         reservations = list()
         all_res = Reservation.objects.filter(room__pk=room_pk)
         for res in all_res:
-            if res.start_time.date() >= range_from and res.end_time.date() <= to:
+            # Check if a recurrence falls into this range
+            if res.recurrence_rule_args:
+                rrule_res = [
+                    r for r in list(pickle.loads(res.recurrence_rule_args))
+                    if range_from <= r.date() <= to
+                ]
+                for rrule_res_ in rrule_res:
+                    reservations.append({
+                        'start': rrule_res_.strftime('%Y-%m-%dT%H:%M:%S'),
+                        'end': (rrule_res_ + (res.end_time - res.start_time)).strftime('%Y-%m-%dT%H:%M:%S'),
+                        'id': str(res.pk) + str(uuid.uuid4())[:8],
+                        'text': '<b>{name}{unapproved}</b><br/>{start} - {end}<br/>{description}'.format(
+                            name=res.name,
+                            unapproved=' (Unapproved)' if not res.approved else '',
+                            start=res.start_time.strftime('%I:%M%p'),
+                            end=res.end_time.strftime('%I:%M%p'),
+                            description=res.description
+                        ),
+                        'backColor': '#CED3DC' if res.approved else '#F4DFB7',
+                        'borderColor': 'transparent'
+                    })
+            elif res.start_time.date() >= range_from and res.end_time.date() <= to:
                 reservations.append({
                     'start': res.start_time.strftime('%Y-%m-%dT%H:%M:%S'),
                     'end': res.end_time.strftime('%Y-%m-%dT%H:%M:%S'),
@@ -60,7 +83,6 @@ class Reservation(models.Model):
                     'backColor': '#CED3DC' if res.approved else '#F4DFB7',
                     'borderColor': 'transparent'
                 })
-
         return reservations
 
     def date(self):
