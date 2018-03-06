@@ -38,13 +38,12 @@ $(function() {
         // Initialize calendar instance
         var cal = new DayPilot.Calendar(calId);
         cal.viewType = 'Week';
-        // cal.theme = 'calendar_green';
 
         // Attach event handlers
         cal.onEventClick = function(args) {
             $editEventDialogue.open();
             $editEventDialogue.find('span.title').text(args.e.data.text.split('</b>')[0].substring(3));
-            $editEventDialogue.find('button').data('pk', args.e.data.id);
+            $editEventDialogue.find('button').data('pk', args.e.data.tags.pk);
         };
         cal.onTimeRangeSelected = function(args) {
             cal.clearSelection();
@@ -168,14 +167,18 @@ $(function() {
                 displayMessage('Reservation ' + data.name + ' deleted.');
 
                 // Iterate through reservations until we have an ID match
+                var removeEvents = [];
                 $.each(dp.events.list, function(i, event) {
-                    if (event.id === pk) {
-                        // Remove event from list and break out of $.each()
-                        dp.events.list.splice(i, 1);
-                        dp.update();
-                        return false;
+                    if (event.tags.pk === pk) {
+                        removeEvents.push(i);
                     }
                 });
+
+                // Delete events
+                for (var i = removeEvents.length - 1; i >= 0; i--) {
+                    dp.events.list.splice(removeEvents[i], 1);
+                }
+                dp.update();
             } else {
                 displayMessage('Error deleting reservation' + data.name + '.');
                 console.log(data.error);

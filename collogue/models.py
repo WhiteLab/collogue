@@ -57,6 +57,8 @@ class Reservation(models.Model):
                     reservations.append({
                         'start': rrule_res_.strftime('%Y-%m-%dT%H:%M:%S'),
                         'end': (rrule_res_ + (res.end_time - res.start_time)).strftime('%Y-%m-%dT%H:%M:%S'),
+                        # 'id': res.pk,
+                        'tags': {'pk': res.pk},
                         'id': str(res.pk) + str(uuid.uuid4())[:8],
                         'text': '<b>{name}{unapproved}</b><br/>{start} - {end}<br/>{description}'.format(
                             name=res.name,
@@ -73,6 +75,7 @@ class Reservation(models.Model):
                     'start': res.start_time.strftime('%Y-%m-%dT%H:%M:%S'),
                     'end': res.end_time.strftime('%Y-%m-%dT%H:%M:%S'),
                     'id': res.pk,
+                    'tags': {'pk': res.pk},
                     'text': '<b>{name}{unapproved}</b><br/>{start} - {end}<br/>{description}'.format(
                         name=res.name,
                         unapproved=' (Unapproved)' if not res.approved else '',
